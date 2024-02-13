@@ -17,7 +17,7 @@ class Coreblock(nn.Module):
     def __init__(self, dmodel, dimff, dropout):
         super(Coreblock, self).__init__()
         self.transformerblock = nn.TransformerEncoderLayer(d_model=dmodel, dim_feedforward = dimff, 
-                                                           dropout=dropout, batch_first=True)
+                                                           dropout=dropout, batch_first=True, nhead=8)
     def forward(self, input):
         return self.transformerblock(input)
     
@@ -60,10 +60,10 @@ class Core(nn.Module):
 
         for i in range(self.n_layers):
             transformer_out = self.transformer_layers[i](transformer_out)
-        transformer_output = transformer_output.reshape(batch_size * sequence_length, embedding_size)
+        transformer_out = transformer_out.reshape(batch_size * sequence_length, embedding_size)
         del input_tensor
 
-        return transformer_output
+        return transformer_out
 
 def test():
 
